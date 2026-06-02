@@ -12,8 +12,6 @@ private:
 	void Extract(const std::string& filepath, std::vector<std::string>& mas);
 	void Input(size_t n, std::vector<std::string>& mas);
 public:
-	UniteTwo();
-	~UniteTwo();
 	void ExtractDataFirst(const std::string& filepath);
 	void ExtractDataSecond(const std::string& filepath);
 	void SaveData(const std::string& filepath);

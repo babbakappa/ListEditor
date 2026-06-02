@@ -2,14 +2,6 @@
 
 using namespace std;
 
-NoDuplicates::NoDuplicates() {}
-
-NoDuplicates::~NoDuplicates()
-{
-	array.clear();
-	array.shrink_to_fit();
-}
-
 void NoDuplicates::ExtractData(string filepath)
 {
 	ifstream fin(filepath);
@@ -19,7 +11,7 @@ void NoDuplicates::ExtractData(string filepath)
 		return;
 	}
 	string temporary;
-	while (fin >> temporary) {
+	while (getline(fin, temporary)) {
 		array.push_back(temporary);
 	}
 	fin.close();
@@ -44,7 +36,6 @@ void NoDuplicates::InputData(int size)
 
 void NoDuplicates::OutputData()
 {
-	cout << "—писок:\n";
 	for (int i = 0; i < array.size(); i++) {
 		cout << array[i] << "\n";
 	}
@@ -52,16 +43,10 @@ void NoDuplicates::OutputData()
 
 void NoDuplicates::DeleteDuplicates()
 {
-	unordered_set<string> seen; //хеш-таблица
-	auto it = array.begin(); //указатель на начало массива
-	//поиск
-	while (it != array.end()) {
-		if (seen.find(*it) != seen.end()) {
-			it = array.erase(it); //удаление если есть
-		}
-		else {
-			seen.insert(*it); //добавление в ином случае
-			it++;
-		}
-	}
+	unordered_set<string> seen;
+	seen.reserve(array.size());
+	auto new_end = std::remove_if(array.begin(), array.end(), [&seen](const string& str) {
+		return !seen.insert(str).second;
+		});
+	array.erase(new_end, array.end());
 }

@@ -2,16 +2,6 @@
 
 using namespace std;
 
-UniteTwo::UniteTwo() {}
-
-UniteTwo::~UniteTwo()
-{
-	array1.clear();
-	array1.shrink_to_fit();
-	array2.clear();
-	array2.shrink_to_fit();
-}
-
 void UniteTwo::Extract(const string& filepath, vector<string>& mas) {
 	ifstream fin(filepath);
 	if (fin.is_open() == false) {
@@ -72,7 +62,12 @@ void UniteTwo::InputSecond(size_t n)
 
 void UniteTwo::UniteTwoArrays()
 {
-	unordered_set<string> unique_set(array1.begin(), array1.end());
+	unordered_set<string> unique_set;
+	unique_set.reserve(array1.size() + array2.size());
+	unique_set.insert(array1.begin(), array1.end());
 	unique_set.insert(array2.begin(), array2.end());
-	array3.assign(unique_set.begin(), unique_set.end());
+	array3.reserve(unique_set.size());
+	for (const auto& str : unique_set) {
+		array3.push_back(str);
+	}
 }
