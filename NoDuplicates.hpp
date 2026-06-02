@@ -18,4 +18,4 @@ public:
 	void DeleteDuplicates();
 };
 
-#endif // !NODUPLICATES_HPP
+#endif

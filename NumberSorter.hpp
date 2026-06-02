@@ -18,4 +18,4 @@ public:
 	void SmallToBigSort();
 	void BigToSmallSort();
 };
-#endif // !LISTSORTER_HPP
+#endif

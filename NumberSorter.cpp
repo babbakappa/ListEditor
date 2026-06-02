@@ -53,3 +53,5 @@ void NumberSorter::BigToSmallSort() {
 void NumberSorter::SmallToBigSort() {
 	sort(array.begin(), array.end(), [](double a, double b) { return a < b; });
 }
+
+
