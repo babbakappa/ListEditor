@@ -1,21 +1,13 @@
 #ifndef NUMBERSORTER_HPP
 #define NUMBERSORTER_HPP
-#include <fstream>
-#include <iostream>
-#include <vector>
 #include <algorithm>
-#include <string>
-class NumberSorter {
-private:
-	std::vector<double> array;
+#include "Methods.hpp"
+
+class NumberSorter : public Methods<double> {
 public:
-	NumberSorter();
-	~NumberSorter();
-	void Input(size_t n);
-	void Print();
-	void Save(std::string filepath);
-	void Extract(std::string filepath);
 	void SmallToBigSort();
 	void BigToSmallSort();
+	void ExtractDataNS(std::string filepath);
+	void InputDataNS(int n, bool& failed);
 };
 #endif
