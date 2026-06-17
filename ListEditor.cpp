@@ -2,368 +2,267 @@
 #include "UniteTwo.hpp"
 #include "NumberSorter.hpp"
 #include "WordSorter.hpp"
-#include <iostream>
-#include <cstdlib>
-#include <windows.h>
+#include "Menu.hpp"
 
 using namespace std;
 
 int main() {
-	string colortable = "0 - черный\n1 - синий\n2 - зеленый\n3 - голубой\n4 - красный\n5 - фиолетовый\n6 - желтый\n7 - белый\n8 - серый\n9 - светло-синий\nA - светло-зеленый\nB - светло-голубой\nC - светло-красный\nD - светло-фиолетовый\nE - светло-желтый\nF - ярко-белый";
-	string bgcolor = "0";
-	string txtcolor = "B";
-	//для русского языка
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
+	Menu::SetRussianEncode();
 
-	int choice;
+	string choice;
+	string bgcolor, txtcolor;
+
+	Menu::LoadSettings(bgcolor, txtcolor);
 
 	do {
-		string command = "color " + bgcolor + txtcolor;
-		system("cls");
-		system(command.c_str());
-		//объекты для работы
-		NoDuplicates Object1;
-		UniteTwo Object2;
-		NumberSorter Object3;
-		WordSorter Object4;
 
-		//пункты в меню
-		cout << "List Editor v1.1\n\n";
-		cout << "==========МЕНЮ==========\n\n";
-		cout << "1. Удалить дубликаты из списка\n";
-		cout << "2. Объединить два списка без дубликатов\n";
-		cout << "3. Сортировать список чисел\n";
-		cout << "4. Отсортировать слова по алфавиту\n";
+		bool failed = false;
 
-		cout << "\n";
-		cout << "0. Выход\n";
-		cout << "-1. Информация о программе\n";
-		cout << "-2. Поменять цвет текста или фона\n";
-		cout << "\n";
+		Menu::PrintMenu(choice);
 
-		//выбор
-		cout << "Выбор: ";
-		cin >> choice;
+		if (choice == "1") {
+			NoDuplicates Object1;
 
-		//меню
-		system("cls");
-		switch (choice) {
+			string subchoice;
+			Menu::AskWhereToTake(subchoice);
 
-		case 1: {
-			cout << "Загрузить из файла или введете список сами?\n";
-			cout << "1. Из файла\n";
-			cout << "2. Сам\n";
-			int subchoice;
-			cout << "Выбор: ";
-			cin >> subchoice;
-
-			if (subchoice == 1) {
-				system("cls");
+			if (subchoice == "1") {
 				string filepath;
-				cout << "Введите путь к файлу: ";
-				cin.ignore();
-				getline(cin, filepath);
+				Menu::IfChosenFile(filepath);
 				Object1.ExtractData(filepath);
 			}
 
-			else if (subchoice == 2) {
-				system("cls");
+			else if (subchoice == "2") {
 				int size;
-				cout << "Введите количество элементов: ";
-				cin >> size;
-				cin.ignore();
+				Menu::IfChosenInputFromKeyboard(size, failed);
+				Menu::ClearBuffer(1);
+
+				if (failed == true) {
+					Menu::PrintError(failed);
+					Menu::ClearBuffer(2);
+					continue;
+				}
+
 				Object1.InputData(size);
 			}
 
 			else {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
-				break;
+				Menu::PrintError(failed);
+			}
+
+			if (failed == true) {
+				continue;
 			}
 
 			Object1.DeleteDuplicates();
 
-			system("cls");
-			cout << "Вывести измененный список на экран или сохранить в файл?\n";
-			cout << "1. В файл\n";
-			cout << "2. На экран\n";
-			cout << "Выбор: ";
-			cin >> subchoice;
+			Menu::AskWhereToOut(subchoice);
 
-			if (subchoice == 1) {
-				system("cls");
+			if (subchoice == "1") {
 				string filepath;
-				cout << "Введите путь к файлу: ";
-				cin.ignore();
-				getline(cin, filepath);
+				Menu::IfChosenFile(filepath);
 				Object1.SaveData(filepath);
-				system("cls");
-				cout << "Данные сохранены в файл " << filepath << "\n";
-				system("pause");
+				Menu::PrintSuccessSave(filepath);
 			}
 
-			else if (subchoice == 2) {
-				system("cls");
-				cout << "Список:\n";
-				Object1.OutputData();
+			else if (subchoice == "2") {
+				Menu::IfChosenOutputOnScreen();
+				Object1.PrintData();
 				system("pause");
 			}
 
 			else {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
+				Menu::PrintError(failed);
 			}
-
-			break;
 		}
 
-		case 2: {
-			system("cls");
-			cout << "Первый список взять из файла или введете сами?\n";
-			cout << "1.Из файла\n";
-			cout << "2.Сам\n";
-			cout << "Выбор: ";
+		else if (choice == "2") {
+			UniteTwo Object2;
 
-			int subchoice1;
-			cin >> subchoice1;
-			cin.ignore();
+			string subchoice1;
+			Menu::AskWhereToTake(subchoice1);
 
-			if (subchoice1 == 1) {
-				system("cls");
+			if (subchoice1 == "1") {
 				string filepath1;
-				cout << "Введите путь к файлу первого списка: ";
-				getline(cin, filepath1);
+				Menu::IfChosenFile(filepath1);
 				Object2.ExtractDataFirst(filepath1);
 			}
-			else if (subchoice1 == 2) {
-				system("cls");
-				cout << "Введите количество элементов первого списка: ";
+			else if (subchoice1 == "2") {
 				int number;
-				cin >> number;
-				cin.ignore();
+				Menu::IfChosenInputFromKeyboard(number, failed);
+				Menu::ClearBuffer(1);
+				if (failed == true) {
+					Menu::PrintError(failed);
+					Menu::ClearBuffer(2);
+					continue;
+				}
 				Object2.InputFirst(number);
 			}
 			else {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				break;
+				Menu::PrintError(failed);
 			}
 
-			system("cls");
-			cout << "Второй список взять из файла или введете сами?\n";
-			cout << "1.Из файла\n";
-			cout << "2.Сам\n";
-			cout << "Выбор: ";
+			if (failed == true) {
+				continue;
+			}
 
-			int subchoice2;
-			cin >> subchoice2;
+			string subchoice2;
+			Menu::AskWhereToTake(subchoice2);
 
-
-			if (subchoice2 == 1) {
-				cin.ignore();
-				system("cls");
+			if (subchoice2 == "1") {
 				string filepath2;
-				cout << "Введите путь к файлу второго списка: ";
-				getline(cin, filepath2);
+				Menu::IfChosenFile(filepath2);
 				Object2.ExtractDataSecond(filepath2);
 			}
-			else if (subchoice2 == 2) {
-				system("cls");
-				cout << "Введите количество элементов второго списка: ";
+			else if (subchoice2 == "2") {
 				int number;
-				cin >> number;
-				cin.ignore();
+				Menu::IfChosenInputFromKeyboard(number, failed);
+				Menu::ClearBuffer(1);
+				if (failed == true) {
+					Menu::PrintError(failed);
+					Menu::ClearBuffer(2);
+					continue;
+				}
 				Object2.InputSecond(number);
 			}
 			else {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
-				break;
+				Menu::PrintError(failed);
+			}
+
+			if (failed == true) {
+				continue;
 			}
 
 			Object2.UniteTwoArrays();
 
-			system("cls");
-			cout << "Списки объединены. Вывести итоговый список на экран или сохранить в файл?\n";
-			cout << "1.Сохранить в файл\n";
-			cout << "2.Вывести на экран\n";
-			cout << "Выбор: ";
-			int subchoice3;
-			cin >> subchoice3;
+			string subchoice3;
+			Menu::AskWhereToOut(subchoice3);
 
-			if (subchoice3 == 1) {
-				cin.ignore();
-				system("cls");
+			if (subchoice3 == "1") {
 				string filepath3;
-				cout << "Введите путь к файлу: ";
-				getline(cin, filepath3);
+				Menu::IfChosenFile(filepath3);
 				Object2.SaveData(filepath3);
-				system("cls");
-				cout << "Данные сохранены в файл " << filepath3 << "\n";
-				system("pause");
+				Menu::PrintSuccessSave(filepath3);
 			}
 
-			else if (subchoice3 == 2) {
-				system("cls");
-				cout << "Список:\n";
-				Object2.Print();
-				system("pause");
+			else if (subchoice3 == "2") {
+				Menu::IfChosenOutputOnScreen();
+				Object2.PrintData();
 			}
 
 			else {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
-				break;
+				Menu::PrintError(failed);
 			}
-
-			break;
 		}
 
-		case 3: {
-			cout << "Введете список сами или загрузите файлом?\n";
-			cout << "1.Из файла\n";
-			cout << "2.Сам\n";
-			cout << "Выбор: ";
+		else if (choice == "3") {
+			NumberSorter Object3;
 
-			int subchoice;
-			cin >> subchoice;
+			string subchoice;
+			Menu::AskWhereToTake(subchoice);
 
-			system("cls");
-
-			if (subchoice == 1) {
-				cin.ignore();
-				cout << "Введите ссылку на файл: ";
+			if (subchoice == "1") {
 				string filepath;
-				getline(cin, filepath);
-				Object3.Extract(filepath);
+				Menu::IfChosenFile(filepath);
+				Object3.ExtractDataNS(filepath);
 			}
 
-			else if (subchoice == 2) {
-				cin.ignore();
-				size_t n;
-				cout << "Введите размер: ";
-				cin >> n;
-				cin.ignore();
-				Object3.Input(n);
+			else if (subchoice == "2") {
+				int n;
+				Menu::IfChosenInputFromKeyboard(n, failed);
+				Menu::ClearBuffer(1);
+				if (failed == true) {
+					Menu::PrintError(failed);
+					Menu::ClearBuffer(2);
+					continue;
+				}
+				Object3.InputDataNS(n, failed);
 			}
 
 			else {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
-				break;
+				Menu::PrintError(failed);
 			}
 
+			if (failed == true) {
+				Menu::ClearBuffer(2);
+				Menu::PrintError(failed);
+				continue;
+			}
+
+			Menu::ClearBuffer(1);
 			system("cls");
 			cout << "Какую сортировку выполнить?\n";
 			cout << "1.От меньшего к большему\n";
 			cout << "2.От большего к меньшему\n";
 			cout << "Выбор: ";
-			int subsubchoice;
-			cin >> subsubchoice;
-
-			system("cls");
-			if (subsubchoice == 1) {
+			string subsubchoice;
+			getline(cin, subsubchoice);
+			
+			if (subsubchoice == "1") {
 				Object3.SmallToBigSort();
 			}
-			else if (subsubchoice == 2) {
+			else if (subsubchoice == "2") {
 				Object3.BigToSmallSort();
 			}
 			else {
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				break;
+				Menu::PrintError(failed);
 			}
 
-			cin.ignore();
-			cout << "Вывести список на экран или сохранить в файл?\n";
-			cout << "1.В файл\n";
-			cout << "2.На экран\n";
-			cout << "Выбор: ";
-			int subchoice2;
-			cin >> subchoice2;
+			if (failed == true) {
+				continue;
+			}
 
-			system("cls");
-			if (subchoice2 == 1) {
-				cin.ignore();
+			string subchoice2;
+			Menu::AskWhereToOut(subchoice2);
+
+			if (subchoice2 == "1") {
 				string filepath;
-				cout << "Введите ссылку на файл: ";
-				getline(cin, filepath);
-				Object3.Save(filepath);
-				system("cls");
-				cout << "Данные сохранены в файл " << filepath << "\n";
+				Menu::IfChosenFile(filepath);
+				Object3.SaveData(filepath);
+				Menu::PrintSuccessSave(filepath);
 			}
 
-			else if (subchoice2 == 2) {
-				cout << "Список:\n";
-				Object3.Print();
+			else if (subchoice2 == "2") {
+				Menu::IfChosenOutputOnScreen();
+				Object3.PrintData();
 			}
 
 			else {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
-				break;
+				Menu::PrintError(failed);
 			}
 
-			system("pause");
-
-			break;
 		}
 
-		case 4: {
-			system("cls");
-			cout << "Введете список сами или из файла?\n";
-			cout << "1.Из файла\n";
-			cout << "2.Сам\n";
-			cout << "Выбор: ";
-			int subchoice;
-			cin >> subchoice;
+		else if (choice == "4") {
+			WordSorter Object4;
 
-			if (subchoice == 1) {
-				system("cls");
-				cin.ignore();
-				cout << "Введите путь к файлу: ";
+			string subchoice;
+			Menu::AskWhereToTake(subchoice);
+
+			if (subchoice == "1") {
 				string filepath;
-				getline(cin, filepath);
-				Object4.Extract(filepath);
+				Menu::IfChosenFile(filepath);
+				Object4.ExtractData(filepath);
 			}
 
-			else if (subchoice == 2) {
-				system("cls");
-				cout << "Введите количество элементов: ";
+			else if (subchoice == "2") {
 				int n;
-				cin >> n;
-				cin.ignore();
-				Object4.Input(n);
+				Menu::IfChosenInputFromKeyboard(n, failed);
+				Menu::ClearBuffer(1);
+				if (failed == true) {
+					Menu::PrintError(failed);
+					Menu::ClearBuffer(2);
+					continue;
+				}
+				Object4.InputData(n);
 			}
 
 			else {
-				system("cls");
-				cout << "Введен неверный вариант!\n";
-				cin.clear();
-				cin.ignore(32767, '\n');
-				system("pause");
-				break;
+				Menu::PrintError(failed);
+			}
+
+			if (failed == true) {
+				continue;
 			}
 
 			system("cls");
@@ -371,129 +270,97 @@ int main() {
 			cout << "1.По афлавиту\n";
 			cout << "2.По алфавиту наоборот\n";
 			cout << "Выбор: ";
-			int subchoice2;
-			cin >> subchoice2;
+			string subchoice2;
+			getline(cin, subchoice2);
 
-			if (subchoice2 == 1) {
+			if (subchoice2 == "1") {
 				Object4.AToZSort();
 			}
-			else if (subchoice2 == 2) {
+			else if (subchoice2 == "2") {
 				Object4.ZToASort();
 			}
 			else {
-				cout << "Введен неверный вариант!\n";
-				break;
+				Menu::PrintError(failed);
 			}
 
-			system("cls");
-			cout << "Вывести список на экран или сохранить в файл?\n";
-			cout << "1.В файл\n";
-			cout << "2.На экран\n";
-			cout << "Выбор: ";
-			int subchoice3;
-			cin >> subchoice3;
+			string subchoice3;
+			Menu::AskWhereToOut(subchoice3);
 
-			system("cls");
-			if (subchoice3 == 1) {
-				cin.ignore();
-				system("cls");
+			if (subchoice3 == "1") {
 				string filepath;
-				cout << "Введите ссылку на файл: ";
-				getline(cin, filepath);
-				Object4.Save(filepath);
-				system("cls");
-				cout << "Данные сохранены в файл " << filepath << "\n";
+				Menu::IfChosenFile(filepath);
+				Object4.SaveData(filepath);
+				Menu::PrintSuccessSave(filepath);
 			}
 
-			else if (subchoice3 == 2) {
-				cout << "Список:\n";
-				Object4.Print();
+			else if (subchoice3 == "2") {
+				Menu::IfChosenOutputOnScreen();
+				Object4.PrintData();
 			}
 
 			else {
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
-				break;
+				Menu::PrintError(failed);
 			}
-			system("pause");
-
-			break;
 		}
 
-		case -1: {
+		else if (choice == "-1") {
 			system("cls");
 			cout << "Информация о программе: \n\n";
-			cout << "List Editor - это программа для сортировки, фильтрации и обработки списков.\n";
-			cout << "Эта программа подойет для работы с очень большими спсиками за счет алгоритмов O(n)\n";
-			cout << "и эффективности самого C++, на котором написана эта программа.\n";
+			cout << "List Editor - это программа для сортировки, фильтрации и обработки списков. Эта\n";
+			cout << "программа подойдет для работы с очень большими списками за счет алгоритмов O(n)\n";
+			cout << "и O(n*log(n)).\n\n";
 			cout << "Исходный код этой программы свободен для использования, редактирования, публикации\n";
 			cout << "исходных кодов модифицированных версий и т.д.\n\n";
 			system("pause");
-			break;
 		}
 
-		case -2: {
-			system("cls");
-			cout << "Что поменять?\n";
-			cout << "1.Цвет фона\n";
-			cout << "2.Цвет текста\n";
-			cout << "Выбор: ";
-			int subchoice;
-			cin >> subchoice;
+		else if (choice == "-2")  {
 
-			system("cls");
-			cout << colortable << "\n\n";
-			cout << "Выбор: ";
-			if (subchoice == 1) {
-				cin.ignore();
-				getline(cin, bgcolor);
-				break;
+			string subchoice;
+			Menu::AskWhatToChangeFromColors(subchoice);
+
+			if (subchoice == "1") {
+				Menu::PrintColortable(bgcolor);
 			}
 
-			else if (subchoice == 2) {
-				cin.ignore();
-				getline(cin, txtcolor);
-				break;
+			else if (subchoice == "2") {
+				Menu::PrintColortable(txtcolor);
 			}
 
 			else {
-				system("cls");
-				cout << "Ошибка! Неверный вариант!\n";
-				cin.clear();
-				cin.ignore(32767, '\n');
-				system("pause");
-				break;
+				Menu::PrintError(failed);
 			}
 
-			break;
+			Menu::SetBGAndTXTColor(bgcolor, txtcolor);
 		}
 
-		default: {
-			if (choice != 0) {
-				system("cls");
-				cout << "Выбран неверный вариант!\n";
-				system("pause");
-				cin.clear();
-				cin.ignore(32767, '\n');
-				break;
+		else {
+			if (choice != "0") {
+				Menu::PrintError(failed);
 			}
 		}
-		}
-	} while (choice != 0);
 
+	} while (choice != "0");
+
+	system("cls");
 	cout << "Завершение работы...\n";
+	Menu::SaveSettings(bgcolor, txtcolor);
 
 	return 0;
-
-
 }
 
-//Что нового в 1.1
+//Изменения в 1.1
 //1.Исправление багов при вводе букв при выборе варианта
 //2.Небольшое улучшение дизайна
 //3.Добавление возможности изменить цвет фона и текста
 //4.Оптимизация алгоритма в NoDuplicates
 //5.Оптимизация алгоритма в UniteTwo
 //6.Исправление багов чтения данных
+
+//Изменения в 1.2
+//1.Добавление отдельного класса для вывода текста в меню
+//2.Небольшая оптимизация кода
+//3.Глобальное изменение работы меню
+//4.Немного изменено оформление
+//5.Создан базовый класс для всех методов
+//6.Добавлено сохранение настройки цветов
