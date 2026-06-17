@@ -2,74 +2,48 @@
 
 using namespace std;
 
-void UniteTwo::Extract(const string& filepath, vector<string>& mas) {
-	ifstream fin(filepath);
-	if (fin.is_open() == false) {
-		system("cls");
-		cerr << "Ошибка! Файла не существует!\n";
-		system("pause");
-		return;
-	}
-	string temporary;
-	while (fin >> temporary) {
-		mas.push_back(temporary);
-	}
-	fin.close();
-}
-
-void UniteTwo::Input(size_t n, vector<string>& mas) {
-	for (size_t i = 0; i < n; i++) {
-		string temporary;
-		getline(cin, temporary);
-		mas.push_back(temporary);
-	}
-}
-
 void UniteTwo::ExtractDataFirst(const string& filepath)
 {
-	UniteTwo::Extract(filepath, array1);
+	ExtractData(filepath);
 }
 
 void UniteTwo::ExtractDataSecond(const string& filepath)
 {
-	UniteTwo::Extract(filepath, array2);
-}
-
-void UniteTwo::SaveData(const string& filepath) {
-	ofstream fout(filepath);
-	for (int i = 0; i < array3.size(); i++) {
-		fout << array3[i] << "\n";
+	ifstream fin(filepath);
+	if (fin.is_open() == false) {
+		cout << "Ошибка! Файла не существует!\n";
+		system("pause");
+		return;
 	}
-	fout.close();
-}
-
-void UniteTwo::Print()
-{
-	for (int i = 0; i < array3.size(); i++) {
-		cout << array3[i] << "\n";
+	string temporary;
+	while (getline(fin, temporary)) {
+		array2.push_back(temporary);
 	}
+	fin.close();
 }
 
 void UniteTwo::InputFirst(size_t n)
 {
-	UniteTwo::Input(n, array1);
+	Methods::InputData(n);
 }
 
 void UniteTwo::InputSecond(size_t n)
 {
-	UniteTwo::Input(n, array2);
+	for (int i = 0; i < n; i++) {
+		string element;
+		getline(cin, element);
+		array2.push_back(element);
+	}
 }
 
 void UniteTwo::UniteTwoArrays()
 {
 	unordered_set<string> unique_set;
-	unique_set.reserve(array1.size() + array2.size());
-	unique_set.insert(array1.begin(), array1.end());
+	unique_set.reserve(array.size() + array2.size());
+	unique_set.insert(array.begin(), array.end());
 	unique_set.insert(array2.begin(), array2.end());
-	array3.reserve(unique_set.size());
-	for (const auto& str : unique_set) {
-		array3.push_back(str);
+	array.clear();
+	for (auto elem : unique_set) {
+		array.push_back(elem);
 	}
 }
-
-
