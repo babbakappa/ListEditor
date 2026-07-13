@@ -5,12 +5,13 @@ using namespace std;
 void Menu::PrintMenu(string& choice)
 {
 	system("cls");
-	cout << "List Editor v1.2\n\n";
 	cout << "==========МЕНЮ==========\n\n";
 	cout << "1. Удалить дубликаты из списка\n";
 	cout << "2. Объединить два списка без дубликатов\n";
 	cout << "3. Сортировать список чисел\n";
-	cout << "4. Отсортировать слова по алфавиту\n\n";
+	cout << "4. Отсортировать слова по алфавиту\n";
+	cout << "5. Инвертировать список (БЕТА)\n";
+	cout << "6. Выбрать рандомный элемент из списка (БЕТА)\n\n";
 	cout << "0. Выход\n";
 	cout << "-1. Информация о программе\n";
 	cout << "-2. Поменять цвет текста или фона\n\n";
@@ -144,4 +145,13 @@ void Menu::SaveSettings(std::string& bgcolor, std::string& txtcolor)
 	fout << bgcolor << "\n";
 	fout << txtcolor;
 	fout.close();
+}
+
+void Menu::PrintProgramName()
+{
+	cout << "#    \n";
+	cout << "#    \n";
+	cout << "#    \n";
+	cout << "#    \n";
+	cout << "#####\n";
 }

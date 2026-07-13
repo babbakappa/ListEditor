@@ -23,5 +23,6 @@ public:
 	static void ClearBuffer(int method);
 	static void LoadSettings(std::string& bgcolor, std::string& txtcolor);
 	static void SaveSettings(std::string& bgcolor, std::string& txtcolor);
+	static void PrintProgramName();
 };
 #endif
