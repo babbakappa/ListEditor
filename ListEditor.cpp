@@ -2,6 +2,8 @@
 #include "UniteTwo.hpp"
 #include "NumberSorter.hpp"
 #include "WordSorter.hpp"
+#include "Inverse.hpp"
+#include "RandomChoice.hpp"
 #include "Menu.hpp"
 
 using namespace std;
@@ -303,6 +305,34 @@ int main() {
 			}
 		}
 
+		//довести до ума
+		else if (choice == "5") {
+			Inverse Object5;
+
+			int n;
+			Menu::IfChosenInputFromKeyboard(n, failed);
+			Menu::ClearBuffer(1);
+			Object5.InputData(n);
+			Object5.InverseList();
+			Object5.PrintData();
+			system("pause");
+		}
+
+		//довести до ума тоже
+		else if (choice == "6") {
+			RandomChoice Object6;
+
+			string result;
+			int n;
+			Menu::IfChosenInputFromKeyboard(n, failed);
+			Menu::ClearBuffer(1);
+			Object6.InputData(n);
+			result = Object6.PickRandom();
+			cout << "\n";
+			cout << result << "\n";
+			system("pause");
+		}
+
 		else if (choice == "-1") {
 			system("cls");
 			cout << "Информация о программе: \n\n";
@@ -364,3 +394,8 @@ int main() {
 //4.Немного изменено оформление
 //5.Создан базовый класс для всех методов
 //6.Добавлено сохранение настройки цветов
+
+//Изменения в 1.3
+//1.Исправление некоторых багов
+//2.Добавление метода инверсирования списка
+
